@@ -45,7 +45,7 @@
 ```yaml
 port: 8080 # Порт на котором запускается сервер
 postgres:
-  url: "host=quests-bd port=5432 user=films password=qwerty dbname=films sslmode=disable" # Строка подключения к базе Postgres
+  url: "host=quests-bd port=5432 user=quests password=qwerty dbname=quests sslmode=disable" # Строка подключения к базе Postgres
 logger:  # Настройки логгера
   app_name: "vk_quests"        # Имя приложения, будет выводиться в лог
   level: 'debug'              # Минимальный уровень вывода информации в лог
