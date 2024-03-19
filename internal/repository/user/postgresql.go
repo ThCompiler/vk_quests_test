@@ -2,8 +2,6 @@ package user
 
 import (
 	"database/sql"
-	"vk_quests/internal/usecase/quest"
-
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
@@ -218,7 +216,7 @@ func (pu *PostgresUser) IsCompletedQuest(user *User, quest *qr.Quest) error {
 	return ErrorUserAlreadyCompleteQuest
 }
 
-func (pu *PostgresUser) ApplyCost(user *User, quest *quest.Quest) error {
+func (pu *PostgresUser) ApplyCost(user *User, quest *qr.Quest) error {
 	tx, err := pu.db.Beginx()
 	if err != nil {
 		return errors.Wrapf(err,
