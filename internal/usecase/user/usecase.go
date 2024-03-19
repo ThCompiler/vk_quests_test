@@ -3,6 +3,7 @@ package user
 import (
 	"math/rand"
 	"time"
+
 	"vk_quests/internal/pkg/types"
 	"vk_quests/internal/repository/quest"
 	"vk_quests/internal/repository/user"
@@ -10,6 +11,8 @@ import (
 )
 
 var rnd = rand.New(rand.NewSource(time.Now().UnixNano()))
+
+const CompleteChance = 0.5
 
 type UserUsecase struct {
 	users  user.Repository
@@ -64,21 +67,21 @@ func (uu *UserUsecase) GetUserHistory(id types.Id) ([]HistoryRecord, error) {
 	return slices.Map(history, func(record user.HistoryRecord) HistoryRecord { return *FromRepHistory(&record) }), nil
 }
 
-func (uu *UserUsecase) ApplyQuests(questId types.Id, userId types.Id) error {
+func (uu *UserUsecase) ApplyQuests(questId, userId types.Id) error {
 	qst, err := uu.quests.GetQuest(questId)
 	if err != nil {
 		return err
 	}
 
-	if err = uu.users.HasUser(userId); err != nil {
+	if err := uu.users.HasUser(userId); err != nil {
 		return err
 	}
 
-	if err = uu.users.IsCompletedQuest(&user.User{ID: userId}, qst); err != nil {
+	if err := uu.users.IsCompletedQuest(&user.User{ID: userId}, qst); err != nil {
 		return err
 	}
 
-	if qst.Type == types.USUAL || rnd.Float64() > 0.5 {
+	if qst.Type == types.USUAL || rnd.Float64() > CompleteChance {
 		return uu.users.ApplyCost(&user.User{ID: userId}, qst)
 	}
 

@@ -1,12 +1,14 @@
 package user
 
 import (
+	"math/rand"
+	"testing"
+
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 	"github.com/pkg/errors"
 	"go.uber.org/mock/gomock"
-	"math/rand"
-	"testing"
+
 	"vk_quests/internal/pkg/types"
 	qr "vk_quests/internal/repository/quest"
 	mrq "vk_quests/internal/repository/quest/mocks"
@@ -159,11 +161,12 @@ func (uus *UserUsecaseSuite) TestGetUsersFunction(t provider.T) {
 		Balance: 30,
 	}
 
-	repositoryUser := []ur.User{{
-		ID:      user.ID,
-		Name:    user.Name,
-		Balance: user.Balance,
-	},
+	repositoryUser := []ur.User{
+		{
+			ID:      user.ID,
+			Name:    user.Name,
+			Balance: user.Balance,
+		},
 	}
 
 	t.WithNewStep("Correct execute", func(t provider.StepCtx) {

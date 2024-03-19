@@ -2,10 +2,12 @@ package app
 
 import (
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/jmoiron/sqlx"
+
 	"vk_quests/config"
 	v1 "vk_quests/internal/delivery/http/v1"
 	"vk_quests/internal/delivery/http/v1/handlers"

@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"log"
+
 	"vk_quests/config"
 	"vk_quests/internal/app"
 )

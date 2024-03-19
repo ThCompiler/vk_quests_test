@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+
 	"vk_quests/pkg/logger"
 
 	"github.com/ilyakaznacheev/cleanenv"

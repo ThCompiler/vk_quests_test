@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
+
 	"vk_quests/internal/delivery/http/v1/model/request"
 	"vk_quests/internal/delivery/http/v1/model/response"
 	"vk_quests/internal/delivery/middleware"

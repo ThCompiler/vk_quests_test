@@ -42,3 +42,7 @@ run-coverage:
 	go test -covermode=atomic -coverprofile=cover ./...
 	cat cover | fgrep -v "mock" | fgrep -v "docs" | fgrep -v "config" > cover2
 	go tool cover -func=cover2
+
+.PHONY: fmt
+fmt:
+	gofumpt -e -w -d -extra .

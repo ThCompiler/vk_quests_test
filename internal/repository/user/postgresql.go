@@ -2,11 +2,13 @@ package user
 
 import (
 	"database/sql"
+	"vk_quests/internal/usecase/quest"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
 	"vk_quests/internal/pkg/types"
-	"vk_quests/internal/repository/quest"
+	qr "vk_quests/internal/repository/quest"
 )
 
 const (
@@ -185,7 +187,7 @@ func (pu *PostgresUser) GetHistory(id types.Id) ([]HistoryRecord, error) {
 
 		record.Quest = nil
 		if questId.Valid && name.Valid && description.Valid && cost.Valid && tp.Valid {
-			record.Quest = &quest.Quest{
+			record.Quest = &qr.Quest{
 				ID:          questId.V,
 				Name:        name.String,
 				Description: description.String,
@@ -204,7 +206,7 @@ func (pu *PostgresUser) GetHistory(id types.Id) ([]HistoryRecord, error) {
 	return history, nil
 }
 
-func (pu *PostgresUser) IsCompletedQuest(user *User, quest *quest.Quest) error {
+func (pu *PostgresUser) IsCompletedQuest(user *User, quest *qr.Quest) error {
 	questId := types.Id(0)
 	if err := pu.db.QueryRowx(getCompleteQuest, user.ID, quest.ID).Scan(&questId); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -259,22 +261,27 @@ const (
 
 func checkConflictError(err error) error {
 	var e *pq.Error
+
 	switch {
 	case errors.As(err, &e):
-		switch e.Code {
-		case foreignKeyConflictCode:
-			if e.Constraint == questIdConstraintName {
-				return quest.ErrorQuestNotFound
-			} else if e.Constraint == userIdConstraintName {
-				return ErrorUserNotFound
-			}
-		case uniqueConflictCode:
-			if e.Constraint == uniqueConstraintName {
-				return ErrorUserAlreadyCompleteQuest
-			}
-		}
-		return err
+		return checkPgError(e)
 	default:
 		return err
 	}
+}
+
+func checkPgError(err *pq.Error) error {
+	switch err.Code {
+	case foreignKeyConflictCode:
+		if err.Constraint == questIdConstraintName {
+			return qr.ErrorQuestNotFound
+		} else if err.Constraint == userIdConstraintName {
+			return ErrorUserNotFound
+		}
+	case uniqueConflictCode:
+		if err.Constraint == uniqueConstraintName {
+			return ErrorUserAlreadyCompleteQuest
+		}
+	}
+	return err
 }

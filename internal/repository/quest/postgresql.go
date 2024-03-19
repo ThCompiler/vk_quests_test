@@ -2,6 +2,7 @@ package quest
 
 import (
 	"database/sql"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
 	"vk_quests/internal/pkg/types"

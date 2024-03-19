@@ -2,14 +2,16 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
-	"github.com/ozontech/allure-go/pkg/framework/provider"
-	"github.com/ozontech/allure-go/pkg/framework/suite"
-	"go.uber.org/mock/gomock"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/ozontech/allure-go/pkg/framework/suite"
+	"go.uber.org/mock/gomock"
+
 	"vk_quests/internal/delivery/http/v1/model/response"
 	"vk_quests/internal/pkg/types"
 	qr "vk_quests/internal/repository/quest"

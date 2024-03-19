@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"context"
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"io"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
+
 	"vk_quests/internal/delivery/middleware"
 	"vk_quests/internal/pkg/types"
 	"vk_quests/pkg/logger"
@@ -33,9 +35,8 @@ func (*emptyLogger) Panic(_ any, _ ...any)                          {}
 func (*emptyLogger) Fatal(_ any, _ ...any)                          {}
 func (el *emptyLogger) With(_ logger.Field, _ any) logger.Interface { return el }
 
-func initRequest(method string, path string, body io.Reader, contextValues map[types.ContextField]any) (*http.Request, error) {
+func initRequest(method, path string, body io.Reader, contextValues map[types.ContextField]any) (*http.Request, error) {
 	req, err := http.NewRequest(method, path, body)
-
 	if err != nil {
 		return nil, err
 	}

@@ -1,11 +1,13 @@
 package quest
 
 import (
+	"testing"
+
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 	"github.com/pkg/errors"
 	"go.uber.org/mock/gomock"
-	"testing"
+
 	"vk_quests/internal/pkg/types"
 	qr "vk_quests/internal/repository/quest"
 	mrq "vk_quests/internal/repository/quest/mocks"
@@ -201,13 +203,14 @@ func (qus *QuestUsecaseSuite) TestGetQuestsFunction(t provider.T) {
 		Type:        types.USUAL,
 	}
 
-	repositoryQuest := []qr.Quest{{
-		ID:          quest.ID,
-		Name:        quest.Name,
-		Description: quest.Description,
-		Cost:        quest.Cost,
-		Type:        quest.Type,
-	},
+	repositoryQuest := []qr.Quest{
+		{
+			ID:          quest.ID,
+			Name:        quest.Name,
+			Description: quest.Description,
+			Cost:        quest.Cost,
+			Type:        quest.Type,
+		},
 	}
 
 	t.WithNewStep("Correct execute", func(t provider.StepCtx) {

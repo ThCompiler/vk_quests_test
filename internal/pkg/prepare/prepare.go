@@ -1,10 +1,11 @@
 package prepare
 
 import (
-	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const logName = "log"

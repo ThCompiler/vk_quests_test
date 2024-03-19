@@ -1,10 +1,12 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"net/http"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
+
 	"vk_quests/internal/delivery/http/v1/model/request"
 	"vk_quests/internal/delivery/http/v1/model/response"
 	"vk_quests/internal/delivery/middleware"
@@ -125,7 +127,6 @@ func (uh *UserHandlers) UpdateUser(c *gin.Context) {
 	}
 
 	updatedUser, err := uh.users.UpdateUser(types.Id(id), updateUser.Name)
-
 	if err != nil {
 		if errors.Is(err, ur.ErrorUserNotFound) {
 			operate.SendError(c, ErrorUserNotFound, http.StatusNotFound, l)

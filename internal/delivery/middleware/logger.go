@@ -1,9 +1,11 @@
 package middleware
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"time"
+
 	"vk_quests/internal/pkg/types"
 	"vk_quests/pkg/logger"
 )

@@ -3,9 +3,10 @@ package time
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"github.com/pkg/errors"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
 )
 
 const Format = "02.01.2006 - 15:04:05"

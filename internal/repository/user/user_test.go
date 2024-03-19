@@ -1,12 +1,14 @@
 package user
 
 import (
+	"testing"
+
 	"github.com/lib/pq"
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 	"github.com/pkg/errors"
 	sqlxmock "github.com/zhashkevych/go-sqlxmock"
-	"testing"
+
 	"vk_quests/internal/pkg/types"
 	qr "vk_quests/internal/repository/quest"
 )

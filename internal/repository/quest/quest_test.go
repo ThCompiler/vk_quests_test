@@ -2,11 +2,13 @@ package quest
 
 import (
 	"database/sql"
+	"testing"
+
 	"github.com/ozontech/allure-go/pkg/framework/provider"
 	"github.com/ozontech/allure-go/pkg/framework/suite"
 	"github.com/pkg/errors"
 	sqlxmock "github.com/zhashkevych/go-sqlxmock"
-	"testing"
+
 	"vk_quests/internal/pkg/types"
 )
 

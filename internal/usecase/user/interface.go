@@ -15,5 +15,5 @@ type Usecase interface {
 	UpdateUser(id types.Id, name string) (*User, error)
 	GetUsers() ([]User, error)
 	GetUserHistory(id types.Id) ([]HistoryRecord, error)
-	ApplyQuests(questId types.Id, userId types.Id) error
+	ApplyQuests(questId, userId types.Id) error
 }

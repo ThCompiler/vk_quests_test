@@ -1,12 +1,14 @@
 package app
 
 import (
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 	"io"
 	"log"
 	"net/http"
 	"os"
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+
 	"vk_quests/config"
 	_ "vk_quests/docs"
 	v1 "vk_quests/internal/delivery/http/v1"

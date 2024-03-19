@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
 	"io"
 	"net/http"
+
+	"github.com/pkg/errors"
+
 	"vk_quests/internal/pkg/evjson"
 	"vk_quests/pkg/logger"
 )

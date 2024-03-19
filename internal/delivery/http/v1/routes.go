@@ -1,8 +1,10 @@
 package v1
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+
 	"vk_quests/internal/delivery/middleware"
 	"vk_quests/pkg/logger"
 )

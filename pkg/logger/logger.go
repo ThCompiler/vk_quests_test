@@ -2,11 +2,12 @@ package logger
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"io"
 	"os"
 	"strings"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var DefaultLogger = &Logger{
@@ -165,7 +166,7 @@ func (l *Logger) Fatal(message any, args ...any) {
 	l.log(l.logger.Fatalf, message, args...)
 }
 
-func (l *Logger) log(lg func(message string, args ...any), message any, args ...any) {
+func (*Logger) log(lg func(message string, args ...any), message any, args ...any) {
 	switch tp := message.(type) {
 	case error:
 		lg(tp.Error(), args...)

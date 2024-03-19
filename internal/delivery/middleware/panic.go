@@ -1,9 +1,11 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/gin-gonic/gin"
+
 	"vk_quests/pkg/logger"
 )
 

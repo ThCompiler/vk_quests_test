@@ -1,12 +1,14 @@
 package handlers
 
 import (
-	"github.com/ozontech/allure-go/pkg/framework/provider"
-	"github.com/ozontech/allure-go/pkg/framework/runner"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/ozontech/allure-go/pkg/framework/provider"
+	"github.com/ozontech/allure-go/pkg/framework/runner"
+
 	"vk_quests/internal/delivery/http/v1/model/request"
 )
 
