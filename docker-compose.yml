@@ -1,0 +1,41 @@
+version: "3"
+volumes:
+  postgis-data:
+services:
+  main:
+    image: main
+    networks:
+      - default
+    volumes:
+      - ./logs:/app/app-log
+      - ./config.yaml:/app/config.yaml
+    ports:
+      - "8080:8080"
+    depends_on:
+      - quests-bd
+    restart: on-failure
+  quests-bd:
+    image: postgres:16
+    expose:
+      - "5432"
+    command: "postgres -c shared_preload_libraries='pg_stat_statements'"
+    volumes:
+      - postgis-data:/var/lib/postgresql
+      - ./script:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_USER=quests
+      - POSTGRES_DB=quests
+    ports:
+      - "5432:5432"
+    restart: on-failure
+    healthcheck:
+      test: "exit 0"
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+networks:
+  default:
+    driver: bridge

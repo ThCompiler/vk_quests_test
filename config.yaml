@@ -1,0 +1,9 @@
+port: 8080
+postgres:
+  url: "host=quests-bd port=5432 user=quests password=qwerty dbname=quests sslmode=disable"
+logger:
+  app_name: "vk_quests"
+  level: 'debug'
+  directory: './app-log/'
+  use_std_and_file: true
+  allow_show_low_level: true

@@ -1,0 +1,475 @@
+basePath: /api/v1
+definitions:
+  operate.ModelError:
+    properties:
+      error_message:
+        type: string
+    type: object
+  request.CreateQuest:
+    properties:
+      cost:
+        example: 9
+        format: uint8
+        maximum: 1000
+        minimum: 0
+        type: integer
+      description:
+        example: Random quest
+        type: string
+      name:
+        example: Task
+        type: string
+      type:
+        enum:
+        - usual
+        - random
+        example: random
+        type: string
+    type: object
+  request.UpdateQuest:
+    properties:
+      cost:
+        example: 9
+        format: uint8
+        maximum: 1000
+        minimum: 0
+        type: integer
+      description:
+        example: Random quest
+        type: string
+      type:
+        enum:
+        - usual
+        - random
+        example: random
+        type: string
+    type: object
+  request.User:
+    properties:
+      name:
+        example: User
+        type: string
+    type: object
+  response.HistoryRecord:
+    properties:
+      balance:
+        example: 5
+        format: uint64
+        type: integer
+      created:
+        example: 5
+        format: uint64
+        type: integer
+      quest:
+        $ref: '#/definitions/response.Quest'
+    type: object
+  response.Quest:
+    properties:
+      cost:
+        example: 9
+        format: uint8
+        maximum: 1000
+        minimum: 0
+        type: integer
+      description:
+        example: Random quest
+        type: string
+      id:
+        example: 5
+        format: uint64
+        type: integer
+      name:
+        example: Task
+        type: string
+      type:
+        enum:
+        - usual
+        - random
+        example: random
+        type: string
+    type: object
+  response.StatusApplyCost:
+    properties:
+      status:
+        enum:
+        - success
+        - failure
+        example: success
+        type: string
+    type: object
+  response.User:
+    properties:
+      balance:
+        example: 25
+        format: uint64
+        type: integer
+      id:
+        example: 5
+        format: uint64
+        type: integer
+      name:
+        example: User
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: vet_v2002@mail.ru
+    name: Artem Vetoshkin
+  description: Rest API Для управления базо данных заданий
+  title: Задание
+  version: "1.0"
+paths:
+  /quest:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет задание включая его название(уникальное), описание, стоимость
+        и тип. Есть обычная задание, которое выполняется как только вызывается метод,
+        сигнализирующий о выполнении для пользователя задачи. И случайная задача,
+        которая выполняется в с вероятностью 0,5.
+      parameters:
+      - description: Информация о добавляемом фильме
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateQuest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Задание успешно добавлен в базу
+          schema:
+            $ref: '#/definitions/response.Quest'
+        "400":
+          description: В теле запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "409":
+          description: Задача с таким название уже существует
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Добавление задание.
+      tags:
+      - quest
+  /quest/{quest_id}:
+    delete:
+      description: Удаляет информацию о задании из системы по его id.
+      parameters:
+      - description: Уникальный идентификатор задания
+        in: path
+        name: quest_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Задание успешно удалено
+        "400":
+          description: В пути запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Задание с указанным id не найдено
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Удаление задания.
+      tags:
+      - quest
+    get:
+      description: Позволяет информацию о задании по его id.
+      parameters:
+      - description: Уникальный идентификатор задания
+        in: path
+        name: quest_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Полученное задание
+          schema:
+            items:
+              $ref: '#/definitions/response.Quest'
+            type: array
+        "400":
+          description: В пути запросе ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Задание с указанным id не найдено
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Получение задания.
+      tags:
+      - quest
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные об задании. Все переданные поля будут обновлены.
+        Отсутствующие поля будут оставлены без изменений.
+      parameters:
+      - description: Уникальный идентификатор задания
+        in: path
+        name: quest_id
+        required: true
+        type: integer
+      - description: Информация об обновлении
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateQuest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Задание успешно обновлено в базе
+          schema:
+            $ref: '#/definitions/response.Quest'
+        "400":
+          description: В теле запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Задание с указанным id не найден
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Обновление данных об задании.
+      tags:
+      - quest
+  /quest/list:
+    get:
+      description: Позволяет получить список заданий.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список заданий успешно сформирован
+          schema:
+            items:
+              $ref: '#/definitions/response.Quest'
+            type: array
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Получение списка заданий.
+      tags:
+      - quest
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет пользователя включая его имя. Баланс пользователя при
+        создании 0.
+      parameters:
+      - description: Информация о добавляемом пользователе
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Пользователь успешно добавлен в базу
+          schema:
+            $ref: '#/definitions/response.User'
+        "400":
+          description: В теле запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Добавление пользователя.
+      tags:
+      - user
+  /user/{user_id}:
+    delete:
+      description: Удаляет информацию об пользователе по его id.
+      parameters:
+      - description: Уникальный идентификатор пользователя
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно удалён
+          schema:
+            $ref: '#/definitions/response.User'
+        "400":
+          description: В пути запросе ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Пользователь с указанным id не найден
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Удаление пользователя.
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: Обновляет имя пользователя по его id.
+      parameters:
+      - description: Уникальный идентификатор пользователя
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      - description: Информация об обновлении
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Пользователь успешно обновлен в базе
+          schema:
+            $ref: '#/definitions/response.User'
+        "400":
+          description: В теле запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Пользователь с указанным id не найден
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Обновление данных об пользователе.
+      tags:
+      - user
+  /user/{user_id}/history:
+    get:
+      description: Формирует список выполненных заданий пользователя по его id. Если
+        задача была удалена, то информация о ней не будет выводиться.
+      parameters:
+      - description: Уникальный идентификатор пользователя
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список выполненных заданий пользователя сформирован
+          schema:
+            items:
+              $ref: '#/definitions/response.HistoryRecord'
+            type: array
+        "400":
+          description: В пути запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Получение истории выполнения заданий пользователем.
+      tags:
+      - user
+  /user/complete:
+    post:
+      description: Обрабатывает информацию о выполнение условии для определённого
+        пользователя определённого задания по их идентификаторам.
+      parameters:
+      - description: Уникальный идентификатор пользователи
+        in: query
+        name: user_id
+        required: true
+        type: integer
+      - description: Уникальный идентификатор задачи
+        in: query
+        name: quest_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Результат применения задания к пользователю. Если 'success'
+            - то задача засчитана пользователю, иначе не засчитана
+          schema:
+            items:
+              $ref: '#/definitions/response.StatusApplyCost'
+            type: array
+        "400":
+          description: В параметрах запроса ошибка
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "404":
+          description: Пользователь или задача не найдены
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "409":
+          description: Данную задачу пользователь уже выполнил
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Сообщение о выполнение условии для определённого пользователя определённого
+        задания.
+      tags:
+      - user
+  /user/list:
+    get:
+      description: Формирует список всех пользователей в системы.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список пользователей успешно сформирован
+          schema:
+            items:
+              $ref: '#/definitions/response.User'
+            type: array
+        "500":
+          description: Ошибка сервера
+          schema:
+            $ref: '#/definitions/operate.ModelError'
+      summary: Получение списка пользователь.
+      tags:
+      - user
+schemes:
+- http
+swagger: "2.0"

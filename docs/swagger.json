@@ -1,0 +1,689 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "Rest API Для управления базо данных заданий",
+        "title": "Задание",
+        "contact": {
+            "name": "Artem Vetoshkin",
+            "email": "vet_v2002@mail.ru"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/quest": {
+            "post": {
+                "description": "Добавляет задание включая его название(уникальное), описание, стоимость и тип. Есть обычная задание, которое выполняется как только вызывается метод, сигнализирующий о выполнении для пользователя задачи. И случайная задача, которая выполняется в с вероятностью 0,5.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quest"
+                ],
+                "summary": "Добавление задание.",
+                "parameters": [
+                    {
+                        "description": "Информация о добавляемом фильме",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateQuest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Задание успешно добавлен в базу",
+                        "schema": {
+                            "$ref": "#/definitions/response.Quest"
+                        }
+                    },
+                    "400": {
+                        "description": "В теле запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "409": {
+                        "description": "Задача с таким название уже существует",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/quest/list": {
+            "get": {
+                "description": "Позволяет получить список заданий.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quest"
+                ],
+                "summary": "Получение списка заданий.",
+                "responses": {
+                    "200": {
+                        "description": "Список заданий успешно сформирован",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Quest"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/quest/{quest_id}": {
+            "get": {
+                "description": "Позволяет информацию о задании по его id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quest"
+                ],
+                "summary": "Получение задания.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор задания",
+                        "name": "quest_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Полученное задание",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.Quest"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "В пути запросе ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Задание с указанным id не найдено",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Обновляет данные об задании. Все переданные поля будут обновлены. Отсутствующие поля будут оставлены без изменений.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quest"
+                ],
+                "summary": "Обновление данных об задании.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор задания",
+                        "name": "quest_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Информация об обновлении",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateQuest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Задание успешно обновлено в базе",
+                        "schema": {
+                            "$ref": "#/definitions/response.Quest"
+                        }
+                    },
+                    "400": {
+                        "description": "В теле запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Задание с указанным id не найден",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаляет информацию о задании из системы по его id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "quest"
+                ],
+                "summary": "Удаление задания.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор задания",
+                        "name": "quest_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Задание успешно удалено"
+                    },
+                    "400": {
+                        "description": "В пути запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Задание с указанным id не найдено",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "post": {
+                "description": "Добавляет пользователя включая его имя. Баланс пользователя при создании 0.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Добавление пользователя.",
+                "parameters": [
+                    {
+                        "description": "Информация о добавляемом пользователе",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Пользователь успешно добавлен в базу",
+                        "schema": {
+                            "$ref": "#/definitions/response.User"
+                        }
+                    },
+                    "400": {
+                        "description": "В теле запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/complete": {
+            "post": {
+                "description": "Обрабатывает информацию о выполнение условии для определённого пользователя определённого задания по их идентификаторам.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Сообщение о выполнение условии для определённого пользователя определённого задания.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор пользователи",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор задачи",
+                        "name": "quest_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Результат применения задания к пользователю. Если 'success' - то задача засчитана пользователю, иначе не засчитана",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.StatusApplyCost"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "В параметрах запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь или задача не найдены",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "409": {
+                        "description": "Данную задачу пользователь уже выполнил",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/list": {
+            "get": {
+                "description": "Формирует список всех пользователей в системы.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Получение списка пользователь.",
+                "responses": {
+                    "200": {
+                        "description": "Список пользователей успешно сформирован",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.User"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{user_id}": {
+            "put": {
+                "description": "Обновляет имя пользователя по его id.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Обновление данных об пользователе.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор пользователя",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Информация об обновлении",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно обновлен в базе",
+                        "schema": {
+                            "$ref": "#/definitions/response.User"
+                        }
+                    },
+                    "400": {
+                        "description": "В теле запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь с указанным id не найден",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Удаляет информацию об пользователе по его id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Удаление пользователя.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор пользователя",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Пользователь успешно удалён",
+                        "schema": {
+                            "$ref": "#/definitions/response.User"
+                        }
+                    },
+                    "400": {
+                        "description": "В пути запросе ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "404": {
+                        "description": "Пользователь с указанным id не найден",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{user_id}/history": {
+            "get": {
+                "description": "Формирует список выполненных заданий пользователя по его id. Если задача была удалена, то информация о ней не будет выводиться.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Получение истории выполнения заданий пользователем.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Уникальный идентификатор пользователя",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Список выполненных заданий пользователя сформирован",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.HistoryRecord"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "В пути запроса ошибка",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка сервера",
+                        "schema": {
+                            "$ref": "#/definitions/operate.ModelError"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "operate.ModelError": {
+            "type": "object",
+            "properties": {
+                "error_message": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateQuest": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 1000,
+                    "minimum": 0,
+                    "example": 9
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Random quest"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Task"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "usual",
+                        "random"
+                    ],
+                    "example": "random"
+                }
+            }
+        },
+        "request.UpdateQuest": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 1000,
+                    "minimum": 0,
+                    "example": 9
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Random quest"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "usual",
+                        "random"
+                    ],
+                    "example": "random"
+                }
+            }
+        },
+        "request.User": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "User"
+                }
+            }
+        },
+        "response.HistoryRecord": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer",
+                    "format": "uint64",
+                    "example": 5
+                },
+                "created": {
+                    "type": "integer",
+                    "format": "uint64",
+                    "example": 5
+                },
+                "quest": {
+                    "$ref": "#/definitions/response.Quest"
+                }
+            }
+        },
+        "response.Quest": {
+            "type": "object",
+            "properties": {
+                "cost": {
+                    "type": "integer",
+                    "format": "uint8",
+                    "maximum": 1000,
+                    "minimum": 0,
+                    "example": 9
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Random quest"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "uint64",
+                    "example": 5
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Task"
+                },
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "usual",
+                        "random"
+                    ],
+                    "example": "random"
+                }
+            }
+        },
+        "response.StatusApplyCost": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "success",
+                        "failure"
+                    ],
+                    "example": "success"
+                }
+            }
+        },
+        "response.User": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer",
+                    "format": "uint64",
+                    "example": 25
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "uint64",
+                    "example": 5
+                },
+                "name": {
+                    "type": "string",
+                    "example": "User"
+                }
+            }
+        }
+    }
+}
